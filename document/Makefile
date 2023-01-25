@@ -7,7 +7,7 @@
 
 include ../Makefile.global
 
-docfiles = COPYING README
+docfiles = README
 man8file = cds.8
 langdir =
 

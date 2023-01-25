@@ -7,7 +7,7 @@
 
 include ../../Makefile.global
 
-docfiles = COPYING README
+docfiles = README
 doclangdir = hu-UTF8/
 man8file = cds.8
 langdir = hu/
