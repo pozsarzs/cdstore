@@ -1,0 +1,49 @@
+CDStore - Parancssoros CD katalógus
+===================================
+
+1. Általános információk
+------------------------
+    A CDStore egy könnyen kezelhető lemez katalógus. Eredetileg
+parancssoros használatra készült, de létezik neki teljes képernyős és
+grafikus  változata is. Ezek futtatásához a Cdialog és az Xdialog
+szükséges. Telepítés után szerkessze a beállítás fájlt.
+    Ez egy olyan szoftver, amely önnek nem kerül pénzbe (esetleg az
+internet használatáért kell fizetnie). Ennek egyedüli feltétele a
+General Public Licence (Általános Közreadási Feltételek) elfogadása és
+betartása.
+
+2. Letöltés és kapcsolatok
+--------------------------
+Web:	http://www.pozsarzs.hu
+FTP:	ftp://pozsarzs.homeftp.net/programmes/cdstore
+E-mail:	pozsarzs@t-email.hu
+ICQ:	278777359
+MSN:	pozsarzs@axelero.hu
+Skype:  pozsarzs
+
+3. Telepítő csomagok
+--------------------
+    cdstore-0.5.tar.gz		'tar.gz' csomag
+    cdstore_0.5_all.deb		Debian csomag
+    cdstore-0.5-1.noarch.rpm	RPM csomag
+    cdstore-0.5-noarch-1.tgz	Slackware csomag
+
+4. Beállítások
+--------------
+  Szerkessze a cdstore.cfg-t vagy készítsen egy ~/.cdstore/cdstorerc-t.
+
+5. Fontos információk
+---------------------
+Copyright (C) 2002-2007, Pozsár Zsolt
+
+    Ez a program szabad szoftver; terjeszthető és/vagy módosítható a
+Free Software Foundation által publikált GNU General Public License 2
+vagy későbbi változata alapján.
+    A program annak reményében kerül terjesztésre, hogy hasznosnak
+bizonyul, de GARANCIA NÉLKÜL; még a PIACKÉPESSÉG illetve egy BIZONYOS
+CÉLRA VALÓ ALKALMASSÁG sincs garantálva. További részletek a GNU General
+Public License-ben. 
+  A copy of the GNU General Public License is available on the World
+Wide Web at <http://www.gnu.org/copyleft/gpl.html>. You can also
+obtain it by writing to the Free Software Foundation,
+Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.

@@ -1,0 +1,63 @@
+dnl +--------------------------------------------------------------------------+
+dnl | CDStore 0.5 * Command line CD catalogue                                  |
+dnl | Copyright (C) 2002-2007 Pozsar Zsolt <pozsarzs@t-email.hu>               |
+dnl | configure.in                                                             |
+dnl | Autoconf input file.                                                     |
+dnl +--------------------------------------------------------------------------+
+
+AC_INIT(script/cds.in)
+AC_CONFIG_AUX_DIR(config)
+
+AC_PREFIX_DEFAULT("/usr/local")
+test x"$prefix" = xNONE && prefix="$ac_default_prefix"
+
+AC_PATH_PROG(rm, rm, no)
+AC_PATH_PROG(install, install, no)
+AC_CHECK_PROGS(make, make make)
+AC_CHECK_PROGS(havecdialog,dialog,no)
+AC_CHECK_PROGS(havexdialog,Xdialog,no)
+
+version=`cat document/VERSION`
+release=`cat document/RELEASE`
+debver=$version-$release
+test "$release" = '1' && debver=$version
+
+AC_SUBST(version)
+AC_SUBST(debver)
+AC_SUBST(release)
+AC_SUBST(prefix)
+AC_SUBST(bindir)
+AC_SUBST(sysconfdir)
+AC_SUBST(libdir)
+AC_SUBST(datadir)
+AC_SUBST(install)
+AC_SUBST(make)
+AC_SUBST(rm)
+
+AC_OUTPUT(  Makefile.global \
+	    autopackage/default.apspec \
+	    document/cds.8 \
+	    document/hu/cds-non-utf.8 \
+	    document/hu-UTF8/cds.8 \
+	    package/cdstore.spec.info \
+	    package/control \
+	    script/cds \
+	    script/cdsdialog \
+	    script/xcdsdialog)
+
+chmod 755 script/cds \
+          script/cdsdialog \
+	  script/xcdsdialog
+
+echo "
+Summary
+=======
+    Programme version	$version
+    Programme release	$release
+    Install prefix	$prefix
+    Cdialog		$havecdialog
+    Xdialog		$havexdialog
+    
+
+  Type '${make} install'.
+"

@@ -1,0 +1,8 @@
+ See 'document' directory for installation instruction!
+
+ File                         Language		char. set
+ ---------------------------------------------------------
+ document/INSTALL             English		iso-8859-1
+ document/hu/INSTALL          Hungarian		iso-8859-2
+ document/hu-UTF8/INSTALL     Hungarian		UTF-8
+ ---------------------------------------------------------

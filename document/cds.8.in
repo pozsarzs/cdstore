@@ -1,0 +1,117 @@
+.TH "cdstore" "8" "@version@" "Pozsar Zsolt" "Applications / Archiving"
+.SH "NAME"
+.LP 
+CDStore \- Command line CD catalogue
+.SH "SYNTAX"
+.LP 
+Search:
+.br
+cds [\fIcategory\fP] \fIsearched text\fP
+.br
+ 
+.br
+Manage categories:
+.br
+cds \fI\-ca\fP | \fI\-ce\fP \fIcategory\fP
+.br
+cds \fI\-cl\fP
+.br
+cds \fI\-\-category\-add\fP | \fI\-\-category\-erase\fP \fIcategory\fP
+.br
+cds \fI\-\-category\-list\fP
+.br
+ 
+.br
+Manage discs:
+.br
+cds \fI\-a\fP | \fI\-e\fP | \fI\-l\fP [\fIcategory\fP] \fIdisc_name\fP
+.br 
+cds \fI\-\-add\fP | \fI\-\-erase\fP | \fI\-\-list\fP | [\fIcategory\fP] \fIdisc_name\fP
+.br
+ 
+.br
+Other:
+.br
+cds \fI\-h\fP | \fI\-v\fP
+.br
+cds \fI\-\-help\fP | \fI\-\-version\fP
+.br
+ 
+.br
+Menu-controlled versions:
+.br
+cdsdialog [\fI-v\fP|\fI--version\fP]
+.br
+xcdsdialog [\fI-v\fP|\fI--version\fP]
+.SH "DESCRIPTION"
+.LP 
+    The CDStore is an easy to use disc catalogue. Originally, it have
+made for command line use, but there are full-screen and graphic
+version. They request Cdialog/Xdialog for run.
+.SH "OPTIONS"
+.LP 
+
+\fB\-ca, \-\-category\-add\fR		Create new category.
+.br
+\fB\-ce, \-\-category\-erase\fR	Erase category.
+.br
+\fB\-cl, \-\-category\-list\fR	List of categories.
+.br
+\fB\-a, \-\-add\fR				Add new disk.
+.br
+\fB\-e, \-\-erase\fR			Remove disc from database.
+.br
+\fB\-h, \-\-help\fR 			Help.
+.br
+\fB\-l, \-\-list\fR			Disc list or disc content.
+.br
+\fB\-v, \-\-version\fR			Version of programme.
+.SH "EXIT CODE"
+.LP
+0:	OK.
+.br
+1:	'Cdialog' or 'Xdialog' is not installed.
+.br
+2:	No such disc in database.
+.br
+3:	No found.
+.br
+4:	Permission error.
+.br
+5:	This name is busy.
+.br
+6:	Editor is not installed.
+.SH "FILES"
+.LP 
+\fI@prefix@/etc/cdstore.cfg\fP
+.br
+     Configuration file.
+.br
+\fI/var/lib/cdstore/\fP
+.br
+    Default directory of data files. (See cdstore.cfg.)
+.br
+\fI~/.cdstore/cdstorerc\fP
+.br
+    Run control file in 'user' mode.
+.br
+\fI~/.cdstore/discs/\fP
+.br
+    Directory of data files in 'user' mode.
+.br
+If '~/.cdstore/cdstorerc' file is readable, the programme switches to 'user' mode.
+.SH "AUTHOR"
+.LP 
+Pozsar Zsolt
+.br
+Web:      http://www.pozsarzs.hu
+.br
+FTP:      ftp://pozsarzs.homeftp.net/programmes/cdstore
+.br
+E-mail:   pozsarzs@t-email.hu
+.br
+ICQ:      278777359
+.br
+MSN:      pozsarzs@axelero.hu
+.br
+Skype:    pozsarzs

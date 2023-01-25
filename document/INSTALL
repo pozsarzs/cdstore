@@ -1,0 +1,67 @@
+CDStore installation instructions
+=================================
+
+1. Install
+----------
+
+a. Installation from source package
+
+    Downloaded file is 'cdstore-0.5.tar.gz'.
+
+    # cp cdstore-0.5.tar.gz /usr/local/src
+    # cd /usr/local/src
+    # tar -xzf cdstore-0.5.tar.gz
+    # cd cdstore-0.5
+    # ./configure [--prefix install_path]
+    # make
+    # make install
+
+b. Installation from binary package
+
+    Downloaded file is 'cdstore-0.5-1.noarch.rpm'
+                    or 'cdstore_0.5_all.deb'
+		    or 'cdstore-0.5-noarch-1.tgz'
+		    or 'cdstore-0.5.package'.
+
+    # rpm -ivh cdstore-0.5-1.noarch.rpm
+		or
+    # dpkg -i cdstore_0.5_all.deb
+		or
+    # installpkg cdstore-0.5-noarch-1.tgz
+        or if autopackage is installed:
+    # package install cdstore-0.5.package
+        if not, run it and follow instruction:
+    # cdstore-0.5.package
+	
+2. Uninstall
+------------
+
+a. Remove with 'make'
+
+    # cd cdstore-0.5
+    # make uninstall
+
+b. Remove with package manager
+
+    # rpm -e cdstore
+	or
+    # dpkg -r cdstore
+	or
+    # removepkg cdstore
+        or
+    # package remove cdstore
+
+3. Packaging
+------------
+
+    # cd cdstore-0.5
+    # make rpm
+	or
+    # make deb
+	or
+    # make tgz
+        or
+    # make apack
+
+Debian, Slackware and Autopackage package will be in '/usr/src', RPM package will be in 
+'/usr/src/RPM/RPMS/ix86' directory.

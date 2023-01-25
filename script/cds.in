@@ -1,0 +1,465 @@
+#!/bin/bash
+
+# +----------------------------------------------------------------------------+
+# | CDStore 0.5 * Command line CD catalogue                                    |
+# | Copyright (C) 2002-2007 Pozsar Zsolt <pozsarzs@t-email.hu>                 |
+# | cds                                                                        |
+# | Shell script                                                               |
+# +----------------------------------------------------------------------------+
+ 
+#      This programme is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#      This programme is distributed in the hope that it will be useful, but
+#    WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    General Public License for more details.
+#
+#      A copy of the GNU General Public License is available on the World
+#    Wide Web at <http://www.gnu.org/copyleft/gpl.html>. You can also
+#    obtain it by writing to the Free Software Foundation,
+#    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+# --- general functions ---
+
+deltemp()                                               # Erase temporary files.
+{
+  rm --force /tmp/$$_1.tmp > /dev/null
+  rm --force /tmp/$$_2.tmp > /dev/null
+}
+
+check_permission()                                           # Check permission.
+{
+  if [ $MODE = root ]
+  then
+    if [ `whoami` != "root" ]
+    then
+      echo "$MSG02"
+      exit 4
+    fi
+  fi
+}
+
+filesearch()                                                      # File search.
+{
+  find * -type f > /tmp/$$_1.tmp
+  if [ $1 = arc ]
+  then
+    for X in $ARCHFILES
+    do
+      cat /tmp/$$_1.tmp | grep '\.'$X >> $LIBDIR/$CATDIR/$LIBFILE
+    done
+  fi	
+  if [ $1 = mm ]
+  then
+    for X in $MMFILES
+    do
+      cat /tmp/$$_1.tmp | grep '\.'$X >> $LIBDIR/$CATDIR/$LIBFILE
+    done
+  fi
+  if [ $1 = all ]; then cat /tmp/$$_1.tmp >> $LIBDIR/$CATDIR/$LIBFILE; fi
+  cat $LIBDIR/$CATDIR/$LIBFILE > /tmp/$$_1.tmp
+  sort /tmp/$$_1.tmp > $LIBDIR/$CATDIR/$LIBFILE
+  deltemp
+}
+
+dirsearch()                                                  # Directory search.
+{
+  find * -type d > /tmp/$$_1.tmp
+  cat /tmp/$$_1.tmp > $LIBDIR/$CATDIR/$LIBFILE
+  cat $LIBDIR/$CATDIR/$LIBFILE > /tmp/$$_1.tmp
+  sort /tmp/$$_1.tmp > $LIBDIR/$CATDIR/$LIBFILE
+  deltemp
+}
+
+# --- special functions ---
+
+cat_add()                                                    # Add new category.
+{
+  check_permission
+
+  if [ $# -eq 0 ]                         # If no parameter, get it from consol.
+  then
+    echo "$MSG38"
+    read -p ">" CATDIR
+  else
+    CATDIR=$1
+  fi
+
+  if [ -d $LIBDIR/$CATDIR ]                         # Make directory of category.
+  then echo $MSG04
+  else mkdir $LIBDIR/$CATDIR
+  fi
+  exit
+}
+
+cat_erase()                                                    # Erase category.
+{
+  check_permission
+
+  if [ $# -eq 0 ]                         # If no parameter, get it from consol.
+  then
+    echo "$MSG38"
+    read -p ">" CATDIR
+  else
+    CATDIR=$1
+  fi
+
+  if [ $CATDIR = 'default' ]                 # Default category is not erasable.
+  then
+    echo $MSG36
+    exit
+  fi
+
+  if [ -d $LIBDIR/$CATDIR ]                         # Erase files and directory.
+  then
+    rm --force $LIBDIR/$CATDIR/*
+    rmdir $LIBDIR/$CATDIR 
+  else 
+    echo $MSG34
+  fi
+  exit
+}
+
+cat_list()                                                # List all categories.
+{
+  echo "$MSG35: $LIBFILE" > /tmp/$$_1.tmp
+  echo "" >> /tmp/$$_1.tmp
+  cd $LIBDIR
+  find -type d > /tmp/$$_2.tmp
+  find -type l >> /tmp/$$_2.tmp
+  cat /tmp/$$_2.tmp | sort | sed 1d | sed s/'\.\/'/''/ >> /tmp/$$_1.tmp
+  cat /tmp/$$_1.tmp | more
+  deltemp
+  exit
+}
+
+
+add()                                                            # Add new disc.
+{
+  check_permission
+
+  if [ $# -eq 0 ]                         # If no parameter, get it from consol.
+  then
+    echo "$MSG37"
+    read -p ">" CATDIR
+    echo "$MSG03"
+    read -p ">" LIBFILE
+  else
+    if [ -z $2 ]
+    then
+      CATDIR='default/'
+      LIBFILE=$1
+    else
+      CATDIR=$1'/'
+      LIBFILE=$2
+    fi  
+  fi
+  if [ -z $LIBFILE ]; then exit 0; fi
+
+  if [ ! -d $LIBDIR/$CATDIR ]                                # No such category.
+  then
+    echo "$MSG34"
+    exit
+  fi
+
+  if [ -f $LIBDIR/$CATDIR/$LIBFILE ]                           # Busy disc name.
+  then
+    echo "$MSG04"
+    exit 5
+  fi
+
+  if [ $SUPERMOUNT != yes ]                                      # Explore disc.
+  then
+    eject $DEVICE
+    read -s -n1 -p "$MSG05"
+    echo ""
+    mount $DEVICE $MOUNTPOINT 2> /dev/null
+    if [ $? -ne 0 ]
+    then 
+      echo "$MSG27"
+      exit
+    fi
+  fi
+  cd $MOUNTPOINT
+  read -s -n1 -p "$MSG06" ST
+  echo ""
+  case $ST in
+    1) dirsearch;;
+    2) filesearch arc;;
+    3) filesearch mm;;
+    *) filesearch all;;
+  esac
+  if [ $SUPERMOUNT != yes ]
+  then
+    cd
+    umount $DEVICE  > /dev/null
+    eject $DEVICE
+    read -s -n1 -p "$MSG07"
+    echo ""
+  fi
+  echo ""
+  $EDITOR $LIBDIR/$CATDIR/$LIBFILE
+  rm --force $LIBDIR/$CATDIR/*~
+  echo "OK."
+  exit
+}
+
+erase()                                              # Erase disc from database.
+{
+  check_permission
+
+  if [ $# -eq 0 ]                         # If no parameter, get it from consol.
+  then
+    echo "$MSG37"
+    read -p ">" CATDIR
+    echo "$MSG03"
+    read -p ">" LIBFILE
+  else
+    if [ -z $2 ]
+    then
+      CATDIR='default/'
+      LIBFILE=$1
+    else
+      CATDIR=$1'/'
+      LIBFILE=$2
+    fi  
+  fi
+  if [ -z $LIBFILE ]; then exit 0; fi
+
+  if [ ! -d $LIBDIR/$CATDIR ]                                # No such category.
+  then
+    echo "$MSG34"
+    exit
+  fi
+
+  if [ -f $LIBDIR/$CATDIR/$LIBFILE ]                          # Remove datafile.
+  then
+    rm -f $LIBDIR/$CATDIR/$LIBFILE; exit 0
+  else
+    echo "$MSG08";
+    exit 2
+  fi
+}
+
+search()                                               # Search in the database.
+{
+  if [ $# -eq 1 ]        # If there is one parameter, select 'default' category.
+  then
+    CATDIR='default/'
+    TEXT=$1
+  else
+    CATDIR=$1'/'
+    TEXT=$2
+  fi  
+
+  ls $LIBDIR/$CATDIR > /tmp/$$_1.tmp                        # Search 'text' in all file.
+  touch  /tmp/$$_2.tmp
+  while read FILENAMES
+  do
+    if grep $1 $LIBDIR/$CATDIR/$FILENAMES > /dev/null
+    then
+      echo $MSG09 $FILENAMES >> /tmp/$$_2.tmp
+      echo "" >> /tmp/$$_2.tmp
+      grep $1 $LIBDIR/$CATDIR/$FILENAMES >> /tmp/$$_2.tmp
+      echo "" >> /tmp/$$_2.tmp
+    fi
+  done < /tmp/$$_1.tmp
+  if [ -s /tmp/$$_2.tmp ]
+  then
+    cat /tmp/$$_2.tmp | more
+  else
+    echo "$MSG10"; echo ""
+  fi
+  deltemp
+  exit 3
+}
+
+list()                                        # List disc name and disc content.
+{
+  if [ $# -eq 0 ]                         # If no parameter, get it from consol.
+  then
+    echo "$MSG37"
+    read -p ">" CATDIR
+    echo "$MSG11"
+    read -p ">" LIBFILE
+  else
+    if [ -z $2 ]
+    then
+      CATDIR='default/'
+      LIBFILE=$1
+    else
+      CATDIR=$1'/'
+      LIBFILE=$2
+    fi  
+  fi
+
+  if [ -z $LIBFILE ];                                               # Full list.
+  then
+    echo $MSG12 $LIBFILE >> /tmp/$$_1.tmp
+    echo "" >> /tmp/$$_1.tmp
+    cd $LIBDIR/$CATDIR
+    find * -type f -maxdepth 0 | sort >> /tmp/$$_1.tmp
+    cat /tmp/$$_1.tmp | more
+    deltemp
+    exit
+  fi
+
+  if [ -r $LIBDIR/$CATDIR/$LIBFILE ]                             # Disc content.
+  then 
+    echo $MSG09 $LIBFILE >> /tmp/$$_1.tmp
+    echo "" >> /tmp/$$_1.tmp
+    cat $LIBDIR/$CATDIR/$LIBFILE >> /tmp/$$_1.tmp
+    cat /tmp/$$_1.tmp | more
+    deltemp
+    exit
+  else
+    deltemp
+    echo "$MSG08"
+    exit 2
+  fi
+}
+
+help()                                                          # Help function.
+{
+  echo "$MSG13"
+  echo "       cds [$MSG32] $MSG31"
+  echo ""
+  echo "       cds -ca | -ce $MSG32"
+  echo "       cds -cl"
+  echo "       cds --category-add | --category-erase $MSG32"
+  echo "       cds --category-list"
+  echo ""
+  echo "       cds -a | -e | -l [$MSG32] $MSG33"
+  echo "       cds --add | --erase | --list  [$MSG32] $MSG33"
+  echo ""
+  echo "       cds -h | -v"
+  echo "       cds --help | --version"
+  echo ""
+  exit
+}
+
+# --- Main function ---
+
+if [ -r $HOME/.cdstore/cdstorerc ]                         # Load configuration.
+then
+  CFGFILE=$HOME/.cdstore/cdstorerc
+  LIBDIR=$HOME/.cdstore/discs
+  MODE=user
+else
+  CFGFILE=@prefix@/etc/cdstore.cfg
+  if [ -f /usr/share/cdstore/cdstore.cfg ]
+  then 
+    CFGFILE=/usr/share/cdstore/cdstore.cfg
+  fi
+  if [ -f $HOME/.local/share/cdstore/cdstore.cfg ]
+  then 
+    MSG39="Sorry, CDStore does not work if you install it to user's directory"
+    MSG40="Please, do system-wide install with apackage and use CDStore in user mode"
+    echo "$MESSAGE39"
+    echo "$MESSAGE40"
+    exit
+  fi
+  LIBDIR=`cat $CFGFILE | grep root_library | sed 's/root_library=//'`
+  MODE=root
+fi
+
+ARCHFILES=`cat $CFGFILE | grep archive_files | sed 's/archive_files=//'`
+DEVICE=`cat $CFGFILE | grep cd-rom_device | sed 's/cd-rom_device=//'`
+MMFILES=`cat $CFGFILE | grep mm_files | sed 's/mm_files=//'`
+MOUNTPOINT=`cat $CFGFILE | grep cd-rom_mount_point | sed 's/cd-rom_mount_point=//'`
+SUPERMOUNT=`cat $CFGFILE | grep with_supermount | sed 's/with_supermount=//'`
+MSGDIR=`cat $CFGFILE | grep language | sed 's/language=//'`
+EDITOR=`cat $CFGFILE | grep -w editor | sed 's/editor=//'`
+
+MSGFILE=@prefix@/share/locale/$MSGDIR/cdstore.msg
+
+if [ -f /usr/share/msg/cdstore_$MSGDIR.msg ]
+then
+  MSGFILE=/usr/share/msg/cdstore_$MSGDIR.msg
+fi
+
+if [ -f $HOME/.local/share/msg/cdstore_$MSGDIR.msg ]
+then
+  MSGFILE=$HOME/.local/share/msg/cdstore_$MSGDIR.msg
+fi
+
+MSG02="You have not got enough permission to this operation!"
+MSG03="Disc name [quit: <enter>]:" 
+MSG04="This name is busy!"
+MSG05="Put the disc to drive and push a key when ready!"
+MSG06="Search target (1: directory, 2: archive, 3: multimedia, other: all)"
+MSG07="Remove the disc from drive and push a key when ready!"
+MSG08="No such disc in the database."
+MSG09="Disc name:"
+MSG10="Not found!"
+MSG11="Disc name [disc list: <enter>]:"
+MSG12="Discs in the database:"
+MSG13="Usage:"
+MSG27="Cannot mount disc!"
+MSG28="Cannot find editor"
+MSG31="searched_text"
+MSG32="category"
+MSG33="disc_name"
+MSG34="No such category in the database."
+MSG35="Categories"
+MSG36="Default category is not erasable."
+MSG37="Category [default: <enter>]:" 
+MSG38="Category [quit: <enter>]:" 
+
+if [ -r $MSGFILE ]
+then
+  MSG02=`cat $MSGFILE | grep msg_02 | sed 's/msg_02=//'`
+  MSG03=`cat $MSGFILE | grep msg_03 | sed 's/msg_03=//'`
+  MSG04=`cat $MSGFILE | grep msg_04 | sed 's/msg_04=//'`
+  MSG05=`cat $MSGFILE | grep msg_05 | sed 's/msg_05=//'`
+  MSG06=`cat $MSGFILE | grep msg_06 | sed 's/msg_06=//'`
+  MSG07=`cat $MSGFILE | grep msg_07 | sed 's/msg_07=//'`
+  MSG08=`cat $MSGFILE | grep msg_08 | sed 's/msg_08=//'`
+  MSG09=`cat $MSGFILE | grep msg_09 | sed 's/msg_09=//'`
+  MSG10=`cat $MSGFILE | grep msg_10 | sed 's/msg_10=//'`
+  MSG11=`cat $MSGFILE | grep msg_11 | sed 's/msg_11=//'`
+  MSG12=`cat $MSGFILE | grep msg_12 | sed 's/msg_12=//'`
+  MSG13=`cat $MSGFILE | grep msg_13 | sed 's/msg_13=//'`
+  MSG27=`cat $MSGFILE | grep msg_27 | sed 's/msg_27=//'`
+  MSG28=`cat $MSGFILE | grep msg_28 | sed 's/msg_28=//'`
+  MSG31=`cat $MSGFILE | grep msg_31 | sed 's/msg_31=//'`
+  MSG32=`cat $MSGFILE | grep msg_32 | sed 's/msg_32=//'`
+  MSG33=`cat $MSGFILE | grep msg_33 | sed 's/msg_33=//'`
+  MSG34=`cat $MSGFILE | grep msg_34 | sed 's/msg_34=//'`
+  MSG35=`cat $MSGFILE | grep msg_35 | sed 's/msg_35=//'`
+  MSG36=`cat $MSGFILE | grep msg_36 | sed 's/msg_36=//'`
+  MSG37=`cat $MSGFILE | grep msg_37 | sed 's/msg_37=//'`
+  MSG38=`cat $MSGFILE | grep msg_38 | sed 's/msg_38=//'`
+fi
+
+if ! type -all "$EDITOR"  > /dev/null 2>&1		    	 # Check editor.
+then
+  echo "$MSG28: $EDITOR"
+  exit 6
+fi
+
+if [ $# -eq 0 ]; then help; fi                   # There are not any parameters.
+
+case $1 in                                                   # Valid parameters.
+  -ca)			cat_add $2;;
+  --category-add)	cat_add $2;;
+  -ce)			cat_erase $2;;
+  --category-erase)	cat_erase $2;;
+  -cl)			cat_list;;
+  --category-list)	cat_list;;
+  -a)			add $2 $3;;
+  --add)		add $2 $3;;
+  -e)			erase $2 $3;;
+  --erase)		erase $2 $3;;
+  -h)			help;;
+  --help)		help;;
+  -l)			list $2 $3;;
+  --list)		list $2 $3;;
+  -v)			echo "@version@";exit;;
+  --version)		echo "@version@";exit;;
+esac
+search $1 $2
+exit

@@ -1,0 +1,51 @@
+CDStore - Command line CD katalogue
+===================================
+
+1. General information
+----------------------
+    The CDStore is an easy to use disc catalogue. Originally, it have
+made for command line use, but there are full-screen and graphic
+version. They request Cdialog/Xdialog for run.
+ is a scripts for full screen and -extension for cdialog and xdialog.
+Edit configuration file after install.
+    This is a software, which does not cost money (maybe you must pay
+for use Internet). The lope conditions is the acceptance and observance
+of the General Public Licence.
+
+2. Download and contact
+-----------------------
+Web:    http://www.pozsarzs.hu
+FTP:    ftp://pozsarzs.homeftp.net/programmes/cdstore
+E-mail: pozsarzs@t-email.hu
+ICQ:    278777359
+MSN:    pozsarzs@axelero.hu
+Skype:  pozsarzs
+
+3. Installer packages
+---------------------
+    cdstore-0.5.tar.gz          'tar.gz' package
+    cdstore_0.5_all.deb         Debian package
+    cdstore-0.5-1.noarch.rpm    RPM package
+    cdstore-0.5-noarch-1.tgz    Slackware package
+    cdstore-0.5.package         AutoPackage package
+
+4. Settings
+-----------
+  Edit cdstore.cfg or create ~/.cdstore/cdstorerc.
+
+5. Important information
+------------------------
+Copyright (C) 2002-2007, Pozsar Zsolt
+
+  This programme is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+  This programme is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+  A copy of the GNU General Public License is available on the World
+Wide Web at <http://www.gnu.org/copyleft/gpl.html>. You can also
+obtain it by writing to the Free Software Foundation,
+Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.

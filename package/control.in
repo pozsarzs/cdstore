@@ -1,0 +1,10 @@
+Package: cdstore
+Version: @debver@
+Section: utils
+Priority: extra
+Architecture: all
+Installed-Size: 148 kB
+Maintainer: Pozsar Zsolt <pozsarzs@t-email.hu>
+Description: Command line CD catalogue with fullscreen and graphic version.
+ Licenc: GNU GPL 2.0.
+ Homepage: http://www.pozsarzs.hu.

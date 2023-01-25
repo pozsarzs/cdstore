@@ -1,0 +1,13 @@
+Summary: Command line CD catalogue
+Name: cdstore
+Version: @version@
+Release: @release@
+License: GNU GPL
+Packager: Pozsar Zsolt <pozsarzs@t-email.hu>
+Group: Archiving/Other
+Url: http://www.pozsarzs.hu
+BuildRoot: /usr/src/RPM/BUILD
+BuildArchitectures: noarch
+
+%description
+Command line CD catalogue with fullscreen and graphic version.

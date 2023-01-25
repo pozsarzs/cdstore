@@ -1,0 +1,67 @@
+CDStore telepítési útmutató
+===========================
+
+1. Telepítés
+------------
+
+a. Telepítés forráscsomagból
+
+    Letöltött fájl: 'cdstore-0.5.tar.gz'.
+
+    # cp cdstore-0.5.tar.gz /usr/local/src
+    # cd /usr/local/src
+    # tar -xzf cdstore-0.5.tar.gz
+    # cd cdstore-0.5
+    # ./configure [--prefix telepítési hely]
+    # make
+    # make install
+
+b. Telepítés bináris csomagból
+
+    Letöltött fájl: 'cdstore-0.5-1.noarch.rpm' vagy
+                    'cdstore_0.5_all.deb' vagy
+		    'cdstore-0.5-noarch-1.tgz' vagy
+		    'cdstore-0.5.package'.
+
+    # rpm -ivh cdstore-0.5-1.noarch.rpm
+		vagy
+    # dpkg -i cdstore_0.5_all.deb
+		vagy
+    # installpkg cdstore-0.5-noarch-1.tgz
+        vagy ha az autopackage telepítve van:
+    # package install cdstore-0.5.package
+        ha nincs, kövesse az utasításokat:
+    # cdstore-0.5.package
+
+2. Eltávolítás
+--------------
+
+a. Forráscsomagból telepített program esetén
+
+    # cd cdstore-0.5
+    # make uninstall
+
+b. Eltávolítás csomag kezelõvel
+
+    # rpm -e cdstore
+	vagy
+    # dpkg -r cdstore
+	vagy
+    # removepkg cdstore
+        vagy
+    # package remove cdstore
+
+3. Csomagolás
+-------------
+
+    # cd cdstore-0.5
+    # make rpm
+	vagy
+    # make deb
+	vagy
+    # make tgz
+        vagy
+    # make apack
+
+A Debian, a Slackware és az Autopackage csomag az '/usr/src', az RPM csomag az
+'/usr/src/RPM/RPMS/ix86' könyvtárba fog kerülni.

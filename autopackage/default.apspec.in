@@ -1,0 +1,44 @@
+# +----------------------------------------------------------------------------+
+# | CDStore 0.5 * Command line CD catalogue                                    |
+# | Copyright (C) 2002-2007 Pozsar Zsolt <pozsarzs@t-email.hu>                 |
+# | default.apspec(.in)                                                        |
+# | apspec file for autopackage                                                |
+# +----------------------------------------------------------------------------+
+
+[Meta]
+RootName: @pozsarzs.hu/cdstore:$SOFTWAREVERSION
+DisplayName: CDStore Disc catalogue
+ShortName: cdstore
+Maintainer: Pozsar Zsolt <pozsarzs@t-email.hu>
+Packager: Pozsar Zsolt <pozsarzs@t-email.hu>
+Summary: Disc catalogue
+URL: http://www.pozsarzs.hu/
+License: GNU General Public License, Version 2 or later
+SoftwareVersion: @debver@
+Repository: http://www.pozsarzs.hu/cdstore/cdstore.xml
+AutopackageTarget: 1.2
+
+[BuildPrepare]
+build_root=/tmp/apbuildroot/
+
+[BuildUnprepare]
+unprepareBuild
+
+[Imports]
+echo 'share/' | import
+
+[Prepare]
+# Dependency checking
+
+[Install]
+installData share/cdstore
+outputStatus "$intl_INSTALLING_EXE"
+linkFile --silent $PREFIX/share/cdstore/cds $PREFIX/bin/cds
+linkFile --silent $PREFIX/share/cdstore/cdsdialog $PREFIX/bin/cdsdialog
+linkFile --silent $PREFIX/share/cdstore/xcdsdialog $PREFIX/bin/xcdsdialog
+installDesktop "Application/Utility" share/applications/cdstore.desktop
+installIcon share/pixmaps/cdstore.xpm
+
+[Uninstall]
+# Usually just the following line is enough to uninstall everything
+uninstallFromLog

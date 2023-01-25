@@ -1,0 +1,20 @@
+%changelog
+* Mon May 28 2007 Pozsar Zsolt <pozsarzs@t-email.hu>
+- Version 0.5. Autopackage, Freedesktop and UTF-8 support.
+
+* Thu May 25 2006 Pozsar Zsolt <pozsarzs@t-email.hu>
+- Version 0.4. There are some categories for discs.
+
+* Sun Sep 25 2005 Pozsar Zsolt <pozsarzs@pozsar_zsolt@t-online.hu>
+- Version 0.3. Fix some little bug in (x)cdsdialog.
+	       Create 'tgz' maker for Makefile.
+
+* Sat Oct 2 2004 Pozsar Zsolt <pozsarzs@axelero.hu>
+- Version 0.2. Create BeOS version.
+
+* Wed Mar 24 2004 Pozsar Zsolt <pozsarzs@axelero.hu>
+- Version 0.2. Remove 'update' function.
+	       Better 'search' function.
+	       There is graphic version with Xdialog.
+ 
+

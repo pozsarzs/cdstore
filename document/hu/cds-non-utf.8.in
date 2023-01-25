@@ -1,0 +1,116 @@
+.TH "cdstore" "8" "@version@" "Pozsár Zsolt" "Alkalmazások / Archiválás"
+.SH "NÉV"
+.LP 
+CDStore \- parancssoros CD katalógus
+.SH "ÁTTEKINTÉS"
+.LP 
+Keresés:
+.br
+cds [\fIkategória\fP] \fIkeresett_szöveg\fP
+.br
+ 
+.br
+Kategóriák kezelése:
+.br
+cds \fI\-ca\fP | \fI\-ce\fP \fIkategória\fP
+.br
+cds \fI\-cl\fP
+.br
+cds \fI\-\-category\-add\fP | \fI\-\-category\-erase\fP \fIkategória\fP
+.br
+cds \fI\-\-category\-list\fP
+.br
+ 
+.br
+Lemezek kezelése:
+.br
+cds \fI\-a\fP | \fI\-e\fP | \fI\-l\fP [\fIkategória\fP] \fIlemeznév\fP
+.br 
+cds \fI\-\-add\fP | \fI\-\-erase\fP | \fI\-\-list\fP | [\fIkategória\fP] \fIlemeznév\fP
+.br
+ 
+.br
+Egyéb:
+.br
+cds \fI\-h\fP | \fI\-v\fP
+.br
+cds \fI\-\-help\fP | \fI\-\-version\fP
+.br
+ 
+.br
+Menüvezérelt változatok:
+.br
+cdsdialog [\fI-v\fP|\fI--version\fP]
+.br
+xcdsdialog [\fI-v\fP|\fI--version\fP]
+\fI--version\fP]
+.SH "LEÍRÁS"
+.LP 
+    A CDStore egy könnyen kezelhetõ lemez katalógus. Eredetileg
+parancssoros használatra készült, de létezik neki teljes képernyõs és
+grafikus  váltotata is. Ezek futtatásához a Cdialog és az Xdialog
+szükséges.
+.SH "OPCIÓK"
+.LP 
+\fB\-ca, \-\-category\-add\fR		Kategória hozzáadása.
+.br
+\fB\-ce, \-\-category\-erase\fR	Kategória törlése.
+.br
+\fB\-a, \-\-add\fR				Lemez hozzáadása.
+.br
+\fB\-e, \-\-erase\fR			Lemez törlése.
+.br
+\fB\-h, \-\-help\fR 			Rövid segítség kiíratása.
+.br
+\fB\-l, \-\-list\fR			Lemezek neve vagy lemezek tartalma.
+.br
+\fB\-v, \-\-version\fR			Program változat.
+.SH "KILÉPÉSI ÉRTÉKEK"
+.LP
+0:	Minden rendben.
+.br
+1:	Nincs telepítve a 'Cdialog' illetve az 'Xdialog'.
+.br
+2:	Nincs ilyen lemez az adatbázisban.
+.br
+3:	Nincs találat.
+.br
+4:	Jogosultsági hiba.
+.br
+5:	Már van ilyen lemez.
+.br
+6:	A megadott szerkesztõ nem található.
+.SH "FÁJLOK"
+.LP 
+\fI@prefix@/etc/cdstore.cfg\fP
+.br
+     Beállításfájl. 
+.br
+\fI/var/lib/cdstore/\fP
+.br
+    Az adatállományok alapértelmezett helye. (Lásd cdstore.cfg.)
+.br
+\fI~/.cdstore/cdstorerc\fP
+.br
+    Beállításfájl felhasználói módban.
+.br
+\fI~/.cdstore/discs/\fP
+.br
+    Az adatállományok helye felhasználói módban.
+.br
+Ha a '~/.cdstore/cdstorerc' fájl létezik, a program átvált felhasználói üzemmódba.
+.SH "SZERZÕ"
+.LP 
+Pozsár Zsolt
+.br
+Web:      http://www.pozsarzs.hu
+.br
+FTP:      ftp://pozsarzs.homeftp.net/programmes/cdstore
+.br
+E-mail:   pozsarzs@t-email.hu
+.br
+ICQ:      278777359
+.br
+MSN:      pozsarzs@axelero.hu
+.br
+Skype:    pozsarzs

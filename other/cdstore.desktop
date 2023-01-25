@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=CDStore disc catalogue
+Name[hu]=CDStore lemezkatalógus
+Comment=Command line disc catalogue with cdialog/xdialog interface
+Comment[hu]=Parancssoros lemezkatalógus cdialog/xdialog felülettel
+Exec=xcdsdialog
+Terminal=false
+Icon=cdstore.xpm
+Type=Application
+Categories=Application;Utility;
